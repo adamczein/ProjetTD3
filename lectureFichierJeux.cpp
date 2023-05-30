@@ -30,18 +30,24 @@ string lireString(istream& fichier)
 
 shared_ptr<Concepteur> chercherConcepteur(Liste<Jeu>& listeJeux, string nom)
 {
-	//TODO: Compléter la fonction (équivalent de trouverDesigner du TD2).
-	return {};
+	for (unsigned i : range(listeJeux.size()))
+	{
+		shared_ptr concepteurPointeur = listeJeux[i]->chercherConcepteur(nom);
+
+		if (concepteurPointeur != nullptr)
+			return concepteurPointeur;
+	}
+	return nullptr;
 }
 
 shared_ptr<Concepteur> lireConcepteur(Liste<Jeu>& lj, istream& f)
 {
-	string nom              = lireString(f);
+	string nom = lireString(f);
 	unsigned anneeNaissance = lireUint16(f);
-	string pays             = lireString(f);
+	string pays = lireString(f);
 
-	//TODO: Compléter la fonction (équivalent de lireDesigner du TD2).
-	cout << "C: " << nom << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
+	cout << "C: " << nom << endl;
+
 	return {};
 }
 
@@ -52,8 +58,17 @@ shared_ptr<Jeu> lireJeu(istream& f, Liste<Jeu>& lj)
 	string developpeur    = lireString(f);
 	unsigned nConcepteurs = lireUint8(f);
 	//TODO: Compléter la fonction (équivalent de lireJeu du TD2).
+
+	shared_ptr ptrJeu = make_shared<Jeu>();
+	cout << "\033[96m" << "Allocation en mémoire du jeu " << titre
+		<< "\033[0m" << endl;
+
 	for (unsigned int i = 0; i < nConcepteurs; i++)
 		lireConcepteur(lj, f);
+
+
+
+
 
 	cout << "J: " << titre << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
 	return {};
@@ -67,7 +82,12 @@ Liste<Jeu> creerListeJeux(const string& nomFichier)
 	//TODO: Compléter la fonction.
 	Liste<Jeu> listeJeux;
 	for ([[maybe_unused]] int i : iter::range(nElements))
-		lireJeu(f, listeJeux);
+	{
+		shared_ptr<Jeu> pointeurJeu = lireJeu(f, listeJeux);
+		listeJeux.ajouterElement(pointeurJeu);
+
+	}
+		
 
 	return {};
 }

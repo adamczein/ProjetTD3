@@ -7,8 +7,46 @@
 #include <iostream>
 #include <fstream>
 using namespace std;
+using namespace iter;
+using namespace gsl;
+
+
 
 //TODO: Vos surcharges d'opérateur <<
+
+ostream& operator<< (ostream& os, const shared_ptr<Concepteur>& pointeurConcepteur)
+{
+	os << "\t" << pointeurConcepteur->getNom() << ", " << pointeurConcepteur->getAnneeNaissance() << ", " << pointeurConcepteur->getPays() << endl;
+	return os;
+}
+
+ostream& operator<<(ostream& os, const shared_ptr<Jeu>& pointeurJeu)
+{
+	static const string ligneSeparation = "\n\033[12m--------------------------------------------------\033[0m\n";
+
+	os << pointeurJeu->getTitre() << ", " << pointeurJeu->getDeveloppeur() << ", " << pointeurJeu->getAnneeSortie() << endl;
+	os << "Concepteurs: \n";
+
+	pointeurJeu->concepteurs.afficher(os);
+
+	os << ligneSeparation;
+	return os;
+
+}
+
+template <typename T>
+
+ostream& operator<< (ostream& os, const Liste<T>& liste)
+{
+	liste.afficher(os);
+	return os;
+}
+
+template <typename T>
+span<shared_ptr<T>> enSpan(Liste<T>& liste)
+{
+	return span(liste.getElements());
+}
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 {

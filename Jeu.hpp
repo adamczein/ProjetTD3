@@ -19,7 +19,15 @@ public:
 
 	//TODO: Pouvoir accéder à la liste de concepteurs.
 
+	Liste<Concepteur> concepteurs;
+
 	//TODO: Votre méthode pour trouver un concepteur selon un critère donné par une lambda, en utilisant la méthode de Liste.
+
+	shared_ptr<Concepteur> chercherConcepteur(const string& nomConcepteur)
+	{
+		return (concepteurs.trouverCritere([&nomConcepteur](shared_ptr<Concepteur> c) {return c->getNom() == nomConcepteur; }));
+	}
+
 
 private:
 	std::string titre_;
